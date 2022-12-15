@@ -1,7 +1,7 @@
 const REGEXP_NUMBER = new RegExp("[0-9]");
 const REGEXP_MINUSCULE = new RegExp("[a-z]");
 const REGEXP_MAJUSCULE = new RegExp("[A-Z]");
-const REGEXP_CARACTERE_SPECIAL = new RegExp("[^a-zA-Z0-9]");
+const REGEX = /^a-zA-Z0-9\s@/;
 
 const SUBMIT_BTN = document.querySelector("#submit");
 
@@ -17,16 +17,23 @@ function force_mdp(str) {
   if (REGEXP_MAJUSCULE.test(str)) {
     n += 26;
   }
-  if (REGEXP_CARACTERE_SPECIAL.test(str)) {
+  if (str.match(REGEX)) {
     n += 28;
+  }
+  if (n == 0) {
+    return 0;
   }
   return Math.round(l * Math.log2(n));
 }
 
+console.log(force_mdp(" "));
+
 SUBMIT_BTN.addEventListener("click", (e) => {
   let force_password = force_mdp(document.querySelector("#password").value);
-  if (isNaN(force_password)) {
-    alert("Entrez un mot de passe");
+  if (isNaN(force_password) || force_password == 0) {
+    alert(
+      "Entrez un mot de passe valide\nUtilisez uniquement des lettres minuscules, majuscules, des chiffres et des caractères spéciaux excepté l'espace et '@'"
+    );
   } else if (force_password <= 104) {
     alert(
       `
